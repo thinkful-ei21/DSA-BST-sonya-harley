@@ -128,7 +128,7 @@ let tree = new BinarySearchTree();
 let arr = [3,1,4,6,9,2,5,7];
 for (let num in arr) {
   
-  tree.insert(arr[num], num);
+  tree.insert(num, arr[num]);
 }
 //console.log(tree.find(6));
 
@@ -162,7 +162,46 @@ function heightOfBST(tree, level=1) {
   return Math.max(heightOfBST(tree.left, level), heightOfBST(tree.right, level));
 }
 
+function goRight(tree) {
+  if(tree === null) {
+    return null;
+  }
+  if (tree.right !== null) {
+    return goRight(tree.right);
+  }
+  return tree;
+}
+
+function thirdLargest(tree) {
+  let biggest = goRight(tree);
+  if (biggest.parent === null) {
+    return biggest;
+  }
+  if (biggest.parent.left !== null) {
+    return biggest.parent.left;
+  }
+  if (biggest.parent.parent !== null) {
+    return biggest.parent.parent;
+  }
+  return biggest.parent;
+}
+
+function levels(tree) {
+  let level = 1;
+  if (tree.left === null && tree.right === null) {
+    return true;
+  }
+  if (tree.left === null) {
+    return (heightOfBST(tree.right) <= 1);
+  }
+  if (tree.right === null) {
+    return (heightOfBST(tree.left) <= 1);
+  }
+  return (levels(tree.right) && levels(tree.left));
+} 
+
 const height = heightOfBST(tree);
 console.log(height);
-tree.remove(7);
-console.log(heightOfBST(tree));
+//console.log(goRight(tree));
+console.log(thirdLargest(tree));
+console.log(levels(tree));
