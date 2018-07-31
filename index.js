@@ -166,3 +166,33 @@ const height = heightOfBST(tree);
 console.log(height);
 tree.remove(7);
 console.log(heightOfBST(tree));
+
+function isItBST(tree) {
+  if (tree === null) {
+    return true;
+  } else if (tree.right !== null && tree.right.key < tree.key) {
+    return false;
+  } else if (tree.left !== null && tree.left.key > tree.key) {
+    return false;
+  } else {
+  return isItBST(tree.right) && isItBST(tree.left);
+  }
+}
+
+console.log(isItBST(tree));
+
+let notBST = {
+  key: 8,
+  left: {
+    key:9,
+    left: null,
+    right: null
+  },
+  right: {
+    key: 6,
+    left: null, 
+    right: null
+  }
+}
+
+console.log(isItBST(notBST));
