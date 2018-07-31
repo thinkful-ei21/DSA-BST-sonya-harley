@@ -126,6 +126,7 @@ class BinarySearchTree {
 
 let tree = new BinarySearchTree();
 let arr = [3,1,4,6,9,2,5,7];
+
 for (let num in arr) {
   
   tree.insert(arr[num], num);
@@ -196,3 +197,33 @@ let notBST = {
 }
 
 console.log(isItBST(notBST));
+
+function findMax(tree) { 
+ if (tree === null) {
+   return null;
+ } else if (!tree.right) {
+   return tree;
+ } else {
+    return findMax(tree.right)
+ }
+}
+
+// console.log(findMax(tree));
+
+function thirdLargestNode(tree) {
+  let largest = findMax(tree);
+  let second = largest.parent;
+  if (second.left && second.left > second.parent) {
+    return second.left.key
+  } else {
+    return second.key;
+  }
+
+}
+
+const newTree = new BinarySearchTree();
+let arr1 = [6,7,3,9,4,0,3,5,8];
+for (let num in arr1) {
+  newTree.insert(arr1[num], num);
+}
+console.log(thirdLargestNode(newTree));
