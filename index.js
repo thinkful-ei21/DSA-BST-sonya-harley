@@ -41,96 +41,128 @@ class BinarySearchTree {
     if (key === this.key) {
       return this.value;
     } else if (key <= this.key && this.left) {
-        return this.left.find(key);
+      return this.left.find(key);
     } else if (key > this.key && this.right) {  
-        return this.right.find(key);
-      } else {
-        return new Error('key error')
-      }
+      return this.right.find(key);
+    } else {
+      return new Error('key error')
+    }
   }
 
   
-    remove(key) {
-      if (this.key == key) {
-          if (this.left && this.right) {
-              const successor = this.right._findMin();
-              this.key = successor.key;
-              this.value = successor.value;
-              successor.remove(successor.key);
-          }
-          //If the node only has a left child, 
-          //then you replace the node with its left child.  
-          else if (this.left) {
-              this._replaceWith(this.left);
-          }
-          //And similarly if the node only has a right child 
-          //then you replace it with its right child.
-          else if (this.right) {
-              this._replaceWith(this.right);
-          }
-          //If the node has no children then
-          //simply remove it and any references to it 
-          //by calling "this._replaceWith(null)".
-          else {
-              this._replaceWith(null);
-          }
+  remove(key) {
+    if (this.key == key) {
+      if (this.left && this.right) {
+        const successor = this.right._findMin();
+        this.key = successor.key;
+        this.value = successor.value;
+        successor.remove(successor.key);
       }
-      else if (key < this.key && this.left) {
-          this.left.remove(key);
+      //If the node only has a left child, 
+      //then you replace the node with its left child.  
+      else if (this.left) {
+        this._replaceWith(this.left);
       }
-      else if (key > this.key && this.right) {
-          this.right.remove(key);
+      //And similarly if the node only has a right child 
+      //then you replace it with its right child.
+      else if (this.right) {
+        this._replaceWith(this.right);
       }
+      //If the node has no children then
+      //simply remove it and any references to it 
+      //by calling "this._replaceWith(null)".
       else {
-          throw new Error('Key Error');
+        this._replaceWith(null);
       }
+    }
+    else if (key < this.key && this.left) {
+      this.left.remove(key);
+    }
+    else if (key > this.key && this.right) {
+      this.right.remove(key);
+    }
+    else {
+      throw new Error('Key Error');
+    }
   }
 
   _replaceWith(node) {
     if (this.parent) {
-        if (this == this.parent.left) {
-            this.parent.left = node;
-        }
-        else if (this == this.parent.right) {
-            this.parent.right = node;
-        }
+      if (this == this.parent.left) {
+        this.parent.left = node;
+      }
+      else if (this == this.parent.right) {
+        this.parent.right = node;
+      }
 
-        if (node) {
-            node.parent = this.parent;
-        }
+      if (node) {
+        node.parent = this.parent;
+      }
     }
     else {
-        if (node) {
-            this.key = node.key;
-            this.value = node.value;
-            this.left = node.left;
-            this.right = node.right;
-        }
-        else {
-            this.key = null;
-            this.value = null;
-            this.left = null;
-            this.right = null;
-        }
+      if (node) {
+        this.key = node.key;
+        this.value = node.value;
+        this.left = node.left;
+        this.right = node.right;
+      }
+      else {
+        this.key = null;
+        this.value = null;
+        this.left = null;
+        this.right = null;
+      }
     }
-}
-
-_findMin() {
-  if (!this.left) {
-      return this;
   }
-  return this.left._findMin();
-}
+
+  _findMin() {
+    if (!this.left) {
+      return this;
+    }
+    return this.left._findMin();
+  }
 
 }
 
 let tree = new BinarySearchTree();
-let arr = [3,1,4,6,9,2,5,7]
- for (let num in arr) {
+let arr = [3,1,4,6,9,2,5,7];
+for (let num in arr) {
   
-   tree.insert(arr[num], num)
- }
-console.log(tree.find(6));
+  tree.insert(arr[num], num);
+}
+//console.log(tree.find(6));
 
 
-console.log(util.inspect(tree, false, null));
+//console.log(util.inspect(tree, false, null));
+// function displayTree(tree) {
+//   let parent = `${tree.key}`;
+//   let left_child = '';
+//   let right_child = '';
+//   if (tree.left !== null) {
+//     left_child = `${displayTree(tree.left)}`;
+//   }
+//   if (tree.right !== null) {
+//     right_child = `${displayTree(tree.right)}`;
+//   }
+//   return `${parent}\n${left_child} ${right_child}`;
+// }
+// console.log(displayTree(tree));
+
+function heightOfBST(tree, level=1) {
+  if (tree.left === null && tree.right === null) {
+    return level;
+  }
+  level++;
+  if (tree.left === null) {
+    return heightOfBST(tree.right, level);
+  }
+  if (tree.right === null) {
+    return heightOfBST(tree.left, level);
+  }
+  return Math.max(heightOfBST(tree.left, level), heightOfBST(tree.right, level));
+}
+
+const height = heightOfBST(tree);
+console.log(height);
+tree.remove(7);
+console.log(heightOfBST(tree));
